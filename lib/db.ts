@@ -1,0 +1,246 @@
+import fs from 'fs';
+import path from 'path';
+
+const dbPath = path.join(process.cwd(), 'data.json');
+
+// Types based on our schema
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  passwordHash: string;
+  role: 'admin' | 'teacher' | 'student';
+  twoFactorEnabled: boolean;
+  createdAt: string;
+}
+
+export interface StudentProfile {
+  id: string;
+  userId: string;
+  course: string;
+  batch: string;
+  dob?: string;
+  phone?: string;
+  address?: string;
+}
+
+export interface Attendance {
+  id: string;
+  studentId: string;
+  date: string;
+  status: 'PRESENT' | 'ABSENT';
+}
+
+export interface Result {
+  id: string;
+  studentId: string;
+  subject: string;
+  marks: number;
+  maxMarks: number;
+  resultStatus: 'PASS' | 'FAIL';
+  createdAt: string;
+}
+
+export interface Material {
+  id: string;
+  title: string;
+  description?: string;
+  fileUrl: string;
+  uploadedBy: string;
+  createdAt: string;
+}
+
+export interface StudentResource {
+  id: string;
+  studentId: string;
+  name: string;
+  url: string;
+  status: 'WANT_TO_LEARN' | 'LEARNING' | 'MASTER';
+  certificateUrl?: string;
+  createdAt: string;
+}
+
+interface DBData {
+  users: User[];
+  studentProfiles: StudentProfile[];
+  attendance: Attendance[];
+  results: Result[];
+  materials: Material[];
+  studentResources: StudentResource[];
+}
+
+// Helper to read DB
+function readDb(): DBData {
+  try {
+    if (!fs.existsSync(dbPath)) {
+      // Return empty structure if file missing
+      return { users: [], studentProfiles: [], attendance: [], results: [], materials: [], studentResources: [] };
+    }
+    const data = fs.readFileSync(dbPath, 'utf8');
+    const parsed = JSON.parse(data);
+    return {
+      users: parsed.users || [],
+      studentProfiles: parsed.studentProfiles || [],
+      attendance: parsed.attendance || [],
+      results: parsed.results || [],
+      materials: parsed.materials || [],
+      studentResources: parsed.studentResources || []
+    };
+  } catch (error) {
+    console.error("Error reading mock DB:", error);
+    return { users: [], studentProfiles: [], attendance: [], results: [], materials: [], studentResources: [] };
+  }
+}
+
+// Helper to write DB
+function writeDb(data: DBData) {
+  try {
+    fs.writeFileSync(dbPath, JSON.stringify(data, null, 2));
+  } catch (error) {
+    console.error("Error writing to mock DB:", error);
+  }
+}
+
+export const db = {
+  user: {
+    findUnique: async ({ where }: { where: { email: string } }) => {
+      const data = readDb();
+      return data.users.find((u) => u.email === where.email) || null;
+    },
+    findFirst: async ({ where }: { where: { id: string } }) => {
+      const data = readDb();
+      return data.users.find((u) => u.id === where.id) || null;
+    },
+    create: async ({ data }: { data: Omit<User, 'id' | 'createdAt'> }) => {
+      const dbData = readDb();
+      const newUser: User = {
+        ...data,
+        id: `user-${Date.now()}`,
+        createdAt: new Date().toISOString(),
+      };
+      dbData.users.push(newUser);
+      writeDb(dbData);
+      return newUser;
+    },
+    findMany: async (args: { where?: { role?: string } } = {}) => {
+      const { where } = args;
+      const data = readDb();
+      if (where?.role) {
+        return data.users.filter(u => u.role === where.role);
+      }
+      return data.users;
+    },
+    updateSettings: async (userId: string, settings: { twoFactorEnabled?: boolean }) => {
+      const dbData = readDb();
+      const userIndex = dbData.users.findIndex(u => u.id === userId);
+      if (userIndex !== -1) {
+        if (settings.twoFactorEnabled !== undefined) {
+          dbData.users[userIndex].twoFactorEnabled = settings.twoFactorEnabled;
+        }
+        writeDb(dbData);
+        return dbData.users[userIndex];
+      }
+      return null;
+    }
+  } as any,
+  studentProfile: {
+    findUnique: async ({ where }: { where: { userId?: string; id?: string } }) => {
+      const data = readDb();
+      if (where.userId) return data.studentProfiles.find(p => p.userId === where.userId) || null;
+      if (where.id) return data.studentProfiles.find(p => p.id === where.id) || null;
+      return null;
+    },
+    create: async ({ data }: { data: Omit<StudentProfile, 'id'> }) => {
+      const dbData = readDb();
+      const newProfile = { ...data, id: `profile-${Date.now()}` };
+      dbData.studentProfiles.push(newProfile);
+      writeDb(dbData);
+      return newProfile;
+    },
+    findMany: async () => {
+      const data = readDb();
+      return data.studentProfiles;
+    }
+  },
+  attendance: {
+    create: async ({ data }: { data: Omit<Attendance, 'id'> }) => {
+      const dbData = readDb();
+      const newRecord = { ...data, id: `att-${Date.now()}` };
+      dbData.attendance.push(newRecord);
+      writeDb(dbData);
+      return newRecord;
+    },
+    findMany: async (args: { where?: { studentId?: string } } = {}) => {
+      const { where } = args;
+      const data = readDb();
+      if (where?.studentId) {
+        return data.attendance.filter(a => a.studentId === where.studentId);
+      }
+      return data.attendance;
+    }
+  },
+  result: {
+    create: async ({ data }: { data: Omit<Result, 'id' | 'createdAt'> }) => {
+      const dbData = readDb();
+      const newRes = { ...data, id: `res-${Date.now()}`, createdAt: new Date().toISOString() };
+      dbData.results.push(newRes);
+      writeDb(dbData);
+      return newRes;
+    },
+    findMany: async (args: { where?: { studentId?: string } } = {}) => {
+      const { where } = args;
+      const data = readDb();
+      if (where?.studentId) return data.results.filter(r => r.studentId === where.studentId);
+      return data.results;
+    }
+  },
+  material: {
+    create: async ({ data }: { data: Omit<Material, 'id' | 'createdAt'> }) => {
+      const dbData = readDb();
+      const newMat = { ...data, id: `mat-${Date.now()}`, createdAt: new Date().toISOString() };
+      dbData.materials.push(newMat);
+      writeDb(dbData);
+      return newMat;
+    },
+    findMany: async () => {
+      return readDb().materials;
+    }
+  },
+  studentResource: {
+    findMany: async (args: { where?: { studentId?: string } } = {}) => {
+      const { where } = args;
+      const data = readDb();
+      if (where?.studentId) {
+        return data.studentResources.filter(r => r.studentId === where.studentId);
+      }
+      return data.studentResources;
+    },
+    create: async ({ data }: { data: Omit<StudentResource, 'id' | 'createdAt'> }) => {
+      const dbData = readDb();
+      const newResource: StudentResource = {
+        ...data,
+        id: `sr-${Date.now()}`,
+        createdAt: new Date().toISOString(),
+      };
+      dbData.studentResources.push(newResource);
+      writeDb(dbData);
+      return newResource;
+    },
+    update: async ({ where, data }: { where: { id: string }, data: Partial<Omit<StudentResource, 'id' | 'studentId' | 'createdAt'>> }) => {
+      const dbData = readDb();
+      const index = dbData.studentResources.findIndex(r => r.id === where.id);
+      if (index !== -1) {
+        dbData.studentResources[index] = { ...dbData.studentResources[index], ...data };
+        writeDb(dbData);
+        return dbData.studentResources[index];
+      }
+      return null;
+    },
+    delete: async ({ where }: { where: { id: string } }) => {
+      const dbData = readDb();
+      dbData.studentResources = dbData.studentResources.filter(r => r.id !== where.id);
+      writeDb(dbData);
+      return true;
+    }
+  }
+};

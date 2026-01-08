@@ -1,0 +1,92 @@
+{
+  "users": [
+    {
+      "id": "admin-1",
+      "name": "System Admin",
+      "email": "admin@school.com",
+      "passwordHash": "$2a$10$abcdefg...",
+      "role": "admin",
+      "twoFactorEnabled": true,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "teacher-1",
+      "name": "John Teacher",
+      "email": "teacher@school.com",
+      "passwordHash": "$2a$10$abcdefg...",
+      "role": "teacher",
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "student-1",
+      "name": "Alice Student",
+      "email": "alice@school.com",
+      "passwordHash": "$2a$10$abcdefg...",
+      "role": "student",
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "student-2",
+      "name": "Bob Student",
+      "email": "bob@school.com",
+      "passwordHash": "$2a$10$abcdefg...",
+      "role": "student",
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "name": "chenna kesava",
+      "email": "chenna@school.com",
+      "passwordHash": "$2b$10$dmshE5ufmuHiWWus0hdsJOUy2NwxU7pymDyBFCbhmGKHYDToN9Loy",
+      "role": "teacher",
+      "id": "user-1767244550095",
+      "createdAt": "2026-01-01T05:15:50.095Z"
+    }
+  ],
+  "studentProfiles": [
+    {
+      "id": "profile-1",
+      "userId": "student-1",
+      "course": "Computer Science",
+      "batch": "2024-A",
+      "dob": "2005-05-15T00:00:00.000Z",
+      "phone": "123-456-7890",
+      "address": "123 Main St"
+    },
+    {
+      "id": "profile-2",
+      "userId": "student-2",
+      "course": "Mechanical Eng",
+      "batch": "2024-B",
+      "dob": "2004-08-20T00:00:00.000Z",
+      "phone": "987-654-3210",
+      "address": "456 Oak Ave"
+    }
+  ],
+  "attendance": [
+    {
+      "id": "att-1",
+      "studentId": "profile-1",
+      "date": "2024-12-01T00:00:00.000Z",
+      "status": "PRESENT"
+    },
+    {
+      "id": "att-2",
+      "studentId": "profile-1",
+      "date": "2024-12-02T00:00:00.000Z",
+      "status": "ABSENT"
+    }
+  ],
+  "results": [
+    {
+      "id": "res-1",
+      "studentId": "profile-1",
+      "subject": "Mathematics",
+      "marks": 85,
+      "maxMarks": 100,
+      "resultStatus": "PASS",
+      "createdAt": "2024-12-10T00:00:00.000Z"
+    }
+  ],
+  "materials": [],
+  "studentResources": []
+}
