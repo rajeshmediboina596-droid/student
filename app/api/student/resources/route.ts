@@ -22,7 +22,7 @@ export async function POST(request: Request) {
     }
 
     try {
-        const { name, url } = await request.json();
+        const { name, url, status } = await request.json();
         if (!name || !url) {
             return NextResponse.json({ message: 'Missing fields' }, { status: 400 });
         }
@@ -32,12 +32,12 @@ export async function POST(request: Request) {
                 studentId: session.user.id,
                 name,
                 url,
-                status: 'WANT_TO_LEARN'
+                status: status || 'WANT_TO_LEARN'
             }
         });
 
         return NextResponse.json(newResource, { status: 201 });
-    } catch (error) {
+    } catch (_error) {
         return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
     }
 }

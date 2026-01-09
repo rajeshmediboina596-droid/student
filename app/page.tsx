@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Footer from '@/components/Footer';
 
 export default function Home() {
     const [showMore, setShowMore] = useState(false);
@@ -94,14 +95,7 @@ export default function Home() {
                             </div>
                         </div>
 
-                        <footer className="mt-24 pt-8 border-t border-slate-100 text-slate-400 text-sm font-bold flex justify-between items-center">
-                            <p>© 2026 SMS PRO. All rights reserved.</p>
-                            <div className="flex gap-8">
-                                <a href="#" className="hover:text-blue-600 transition-colors">Privacy Policy</a>
-                                <a href="#" className="hover:text-blue-600 transition-colors">Terms of Service</a>
-                                <a href="#" className="hover:text-blue-600 transition-colors">Support</a>
-                            </div>
-                        </footer>
+                        <Footer />
                     </div>
                 )}
             </div>

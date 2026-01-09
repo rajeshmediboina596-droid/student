@@ -57,6 +57,8 @@ export interface StudentResource {
   url: string;
   status: 'WANT_TO_LEARN' | 'LEARNING' | 'MASTER';
   certificateUrl?: string;
+  projectUrl?: string;
+  notes?: string;
   createdAt: string;
 }
 
@@ -142,7 +144,7 @@ export const db = {
       }
       return null;
     }
-  } as any,
+  },
   studentProfile: {
     findUnique: async ({ where }: { where: { userId?: string; id?: string } }) => {
       const data = readDb();
@@ -160,6 +162,19 @@ export const db = {
     findMany: async () => {
       const data = readDb();
       return data.studentProfiles;
+    },
+    update: async ({ where, data }: { where: { userId?: string; id?: string }, data: Partial<StudentProfile> }) => {
+      const dbData = readDb();
+      let index = -1;
+      if (where.userId) index = dbData.studentProfiles.findIndex(p => p.userId === where.userId);
+      else if (where.id) index = dbData.studentProfiles.findIndex(p => p.id === where.id);
+
+      if (index !== -1) {
+        dbData.studentProfiles[index] = { ...dbData.studentProfiles[index], ...data };
+        writeDb(dbData);
+        return dbData.studentProfiles[index];
+      }
+      return null;
     }
   },
   attendance: {
@@ -230,6 +245,7 @@ export const db = {
       const dbData = readDb();
       const index = dbData.studentResources.findIndex(r => r.id === where.id);
       if (index !== -1) {
+        // Ensure we don't accidentally overwrite with undefined if passing objects
         dbData.studentResources[index] = { ...dbData.studentResources[index], ...data };
         writeDb(dbData);
         return dbData.studentResources[index];
