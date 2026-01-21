@@ -77,7 +77,7 @@ export default function SettingsPage() {
         <div className="min-h-screen bg-slate-50 flex">
             <Sidebar role="admin" userName={session?.user?.name || 'Admin'} />
 
-            <main className="ml-64 flex-grow p-10 animate-slide-up">
+            <main className="ml-72 flex-grow p-10 animate-slide-up">
                 <header className="mb-12 flex justify-between items-end">
                     <div>
                         <h2 className="text-sm font-black text-rose-600 uppercase tracking-widest mb-2">Configuration</h2>
@@ -214,3 +214,4 @@ export default function SettingsPage() {
         </div>
     );
 }
+

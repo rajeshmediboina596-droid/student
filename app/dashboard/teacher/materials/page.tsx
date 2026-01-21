@@ -14,7 +14,7 @@ export default async function MaterialsPage() {
         <div className="min-h-screen bg-slate-50 flex">
             <Sidebar role="teacher" userName={session.user.name} />
 
-            <main className="ml-64 flex-grow p-10">
+            <main className="ml-72 flex-grow p-10">
                 <header className="mb-12 flex justify-between items-end">
                     <div>
                         <h2 className="text-sm font-black text-indigo-600 uppercase tracking-widest mb-2">Resource Management</h2>
@@ -61,3 +61,4 @@ export default async function MaterialsPage() {
         </div>
     );
 }
+

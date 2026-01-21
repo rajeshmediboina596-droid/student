@@ -63,7 +63,7 @@ export default function StudentResultsPage() {
         <div className="min-h-screen bg-slate-50 text-slate-800 flex">
             <Sidebar role="student" userName={userName} />
 
-            <main className="ml-64 flex-grow p-10 overflow-auto">
+            <main className="ml-72 flex-grow p-10 overflow-auto">
                 <header className="mb-10 flex justify-between items-end">
                     <div>
                         <h2 className="text-[11px] font-black text-blue-600 uppercase tracking-[0.2em] mb-3 leading-none">Performance</h2>
@@ -264,3 +264,4 @@ export default function StudentResultsPage() {
         </div>
     );
 }
+

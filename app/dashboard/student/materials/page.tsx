@@ -200,7 +200,7 @@ export default function StudentMaterialsPage() {
         <div className="min-h-screen bg-slate-50 text-slate-800 flex">
             <Sidebar role="student" userName={userName} />
 
-            <main className="ml-64 flex-grow p-10 overflow-auto">
+            <main className="ml-72 flex-grow p-10 overflow-auto">
                 <header className="mb-10 flex justify-between items-start">
                     <div>
                         <h1 className="text-3xl font-black text-slate-900 mb-1">Stack Tracker</h1>
@@ -470,3 +470,4 @@ function SkillCard({
         </div>
     );
 }
+
