@@ -22,8 +22,8 @@ export async function POST(request: Request) {
     }
 
     try {
-        const { name, url, status } = await request.json();
-        if (!name || !url) {
+        const { name, url, status, category, icon, projects } = await request.json();
+        if (!name) {
             return NextResponse.json({ message: 'Missing fields' }, { status: 400 });
         }
 
@@ -32,7 +32,10 @@ export async function POST(request: Request) {
                 studentId: session.user.id,
                 name,
                 url,
-                status: status || 'WANT_TO_LEARN'
+                status: status || 'WANT_TO_LEARN',
+                category: category || 'Language',
+                icon: icon || 'Code',
+                projects: projects || []
             }
         });
 

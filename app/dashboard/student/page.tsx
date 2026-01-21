@@ -52,7 +52,7 @@ export default function StudentDashboard() {
             });
 
             // Fetch attendance for stats
-            const attRes = await fetch('/api/student/attendance');
+            const attRes = await fetch('/api/student/attendance', { cache: 'no-store' });
             const attData = await attRes.json();
             const attendancePercent = attData.length > 0
                 ? Math.round((attData.filter((a: any) => a.status === 'PRESENT').length / attData.length) * 100)
@@ -61,17 +61,21 @@ export default function StudentDashboard() {
             // Fetch results for stats
             const resRes = await fetch('/api/student/results');
             const resData = await resRes.json();
-            const gpa = resData.length > 0
-                ? (resData.reduce((acc: number, r: any) => acc + (r.marks / r.maxMarks), 0) / resData.length * 10).toFixed(2)
+
+            // Safe handling: ensure resData is an array
+            const resultsList = Array.isArray(resData) ? resData : [];
+
+            const gpa = resultsList.length > 0
+                ? (resultsList.reduce((acc: number, r: any) => acc + (r.marks / r.maxMarks), 0) / resultsList.length * 10).toFixed(2)
                 : "N/A";
 
             setStats({
                 attendance: attendancePercent,
                 gpa,
-                subjects: resData.length,
+                subjects: resultsList.length,
                 rank: '#08'
             });
-            setRecentResults(resData.slice(0, 4));
+            setRecentResults(resultsList.slice(0, 4));
 
         } catch (err) {
             console.error(err);

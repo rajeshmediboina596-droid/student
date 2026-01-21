@@ -43,7 +43,7 @@ export default function Sidebar({ role, userName }: SidebarProps) {
             { name: 'My Dashboard', href: '/dashboard/student', icon: BarChart3 },
             { name: 'Attendance', href: '/dashboard/student/attendance', icon: ClipboardList },
             { name: 'My Grades', href: '/dashboard/student/results', icon: FileText },
-            { name: 'Resources', href: '/dashboard/student/materials', icon: BookOpen },
+            { name: 'Skills', href: '/dashboard/student/materials', icon: BookOpen },
         ],
     };
 

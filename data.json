@@ -7,7 +7,12 @@
       "passwordHash": "$2a$10$abcdefg...",
       "role": "admin",
       "twoFactorEnabled": true,
-      "createdAt": "2024-01-01T00:00:00.000Z"
+      "createdAt": "2024-01-01T00:00:00.000Z",
+      "notificationPreferences": {
+        "emailAlerts": true,
+        "systemUpdates": true,
+        "newEnrollments": true
+      }
     },
     {
       "id": "teacher-1",
@@ -74,6 +79,18 @@
       "studentId": "profile-1",
       "date": "2024-12-02T00:00:00.000Z",
       "status": "ABSENT"
+    },
+    {
+      "studentId": "profile-1",
+      "date": "2026-01-09",
+      "status": "PRESENT",
+      "id": "att-1767943150889"
+    },
+    {
+      "studentId": "profile-2",
+      "date": "2026-01-09",
+      "status": "PRESENT",
+      "id": "att-1767943150891"
     }
   ],
   "results": [
@@ -88,5 +105,22 @@
     }
   ],
   "materials": [],
-  "studentResources": []
+  "studentResources": [
+    {
+      "studentId": "student-1",
+      "name": "hai",
+      "url": "https://digitalnttf.com/library/skill-topic",
+      "status": "WANT_TO_LEARN",
+      "id": "sr-1768368936272",
+      "createdAt": "2026-01-14T05:35:36.272Z"
+    },
+    {
+      "studentId": "student-1",
+      "name": "bye",
+      "url": "https://digitalnttf.com/library/skill-topic",
+      "status": "LEARNING",
+      "id": "sr-1768368945365",
+      "createdAt": "2026-01-14T05:35:45.365Z"
+    }
+  ]
 }

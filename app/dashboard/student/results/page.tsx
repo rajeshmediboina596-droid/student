@@ -20,6 +20,7 @@ import Footer from '@/components/Footer';
 export default function StudentResultsPage() {
     const [results, setResults] = useState<Result[]>([]);
     const [userName, setUserName] = useState('');
+    const [selectedSemester, setSelectedSemester] = useState<number | 'ALL'>('ALL');
 
     useEffect(() => {
         fetchData();
@@ -40,11 +41,19 @@ export default function StudentResultsPage() {
         }
     };
 
+    // Filter results based on selection
+    const filteredResults = selectedSemester === 'ALL'
+        ? results
+        : results.filter(r => r.semester === selectedSemester);
+
+    // Get unique semesters for tabs
+    const semesters = Array.from(new Set(results.map(r => r.semester || 1))).sort((a, b) => a - b);
+
     // Analytics calculations
-    const totalSubjects = results.length;
-    const passedSubjects = results.filter(r => r.resultStatus === 'PASS').length;
+    const totalSubjects = filteredResults.length;
+    const passedSubjects = filteredResults.filter(r => r.resultStatus === 'PASS').length;
     const averagePercentage = totalSubjects > 0
-        ? Math.round(results.reduce((acc, r) => acc + (r.marks / r.maxMarks) * 100, 0) / totalSubjects)
+        ? Math.round(filteredResults.reduce((acc, r) => acc + (r.marks / r.maxMarks) * 100, 0) / totalSubjects)
         : 0;
 
     // CGPA Calculation (Simple mock for demo)
@@ -118,13 +127,26 @@ export default function StudentResultsPage() {
                             <p className="text-slate-500 text-sm font-medium mt-1">Subject-wise percentage breakdown</p>
                         </div>
                         <div className="flex items-center gap-2 bg-slate-50 p-1.5 rounded-xl border border-slate-100">
-                            <button className="px-4 py-1.5 bg-white text-[10px] font-black text-blue-600 rounded-lg shadow-sm border border-slate-100">ALL TERMS</button>
-                            <button className="px-4 py-1.5 text-[10px] font-black text-slate-400 hover:text-slate-600">SEMESTER 1</button>
+                            <button
+                                onClick={() => setSelectedSemester('ALL')}
+                                className={`px-4 py-1.5 text-[10px] font-black rounded-lg transition-all ${selectedSemester === 'ALL' ? 'bg-white text-blue-600 shadow-sm border border-slate-100' : 'text-slate-400 hover:text-slate-600'}`}
+                            >
+                                ALL TERMS
+                            </button>
+                            {semesters.map(sem => (
+                                <button
+                                    key={sem}
+                                    onClick={() => setSelectedSemester(sem as number)}
+                                    className={`px-4 py-1.5 text-[10px] font-black rounded-lg transition-all ${selectedSemester === sem ? 'bg-white text-blue-600 shadow-sm border border-slate-100' : 'text-slate-400 hover:text-slate-600'}`}
+                                >
+                                    SEMESTER {sem}
+                                </button>
+                            ))}
                         </div>
                     </div>
 
                     <div className="h-48 w-full flex items-end gap-1.5 group relative">
-                        {results.map((r, i) => {
+                        {filteredResults.map((r, i) => {
                             const percent = (r.marks / r.maxMarks) * 100;
                             return (
                                 <div key={r.id} className="flex-1 flex flex-col items-center group/bar relative h-full justify-end">
@@ -175,7 +197,7 @@ export default function StudentResultsPage() {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-slate-50">
-                                {results.map((r) => {
+                                {filteredResults.map((r) => {
                                     const percentage = Math.round((r.marks / r.maxMarks) * 100);
                                     return (
                                         <tr key={r.id} className="hover:bg-blue-50/30 transition-all group">
@@ -186,7 +208,7 @@ export default function StudentResultsPage() {
                                                     </div>
                                                     <div>
                                                         <div className="font-black text-slate-800 text-base">{r.subject}</div>
-                                                        <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Semester End Exam</div>
+                                                        <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Semester {r.semester || 1} Exam</div>
                                                     </div>
                                                 </div>
                                             </td>
@@ -242,4 +264,3 @@ export default function StudentResultsPage() {
         </div>
     );
 }
-

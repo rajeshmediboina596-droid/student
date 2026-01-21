@@ -11,10 +11,11 @@ export async function POST(req: Request) {
 
     try {
         const body = await req.json();
-        const { twoFactorEnabled } = body;
+        const { twoFactorEnabled, notificationPreferences } = body;
 
         const updatedUser = await db.user.updateSettings(session.user.id, {
-            twoFactorEnabled
+            twoFactorEnabled,
+            notificationPreferences
         });
 
         if (!updatedUser) {
@@ -41,6 +42,11 @@ export async function GET() {
     }
 
     return NextResponse.json({
-        twoFactorEnabled: user.twoFactorEnabled || false
+        twoFactorEnabled: user.twoFactorEnabled || false,
+        notificationPreferences: user.notificationPreferences || {
+            emailAlerts: false,
+            systemUpdates: false,
+            newEnrollments: false
+        }
     });
 }

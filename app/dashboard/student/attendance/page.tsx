@@ -24,7 +24,7 @@ export default function StudentAttendancePage() {
 
     const fetchData = async () => {
         try {
-            const res = await fetch('/api/student/attendance');
+            const res = await fetch('/api/student/attendance', { cache: 'no-store' });
             if (res.ok) {
                 const data = await res.json();
                 // Sort by date descending for the log
@@ -40,7 +40,7 @@ export default function StudentAttendancePage() {
 
     // Analytics calculations
     const totalDays = attendance.length;
-    const presentDays = attendance.filter(a => a.status === 'PRESENT').length;
+    const presentDays = attendance.filter(a => a.status.toUpperCase() === 'PRESENT').length;
     const attendancePercentage = totalDays > 0 ? Math.round((presentDays / totalDays) * 100) : 0;
 
     // Consistency Graph Data (Last 10 records, sorted by date ascending for graph)

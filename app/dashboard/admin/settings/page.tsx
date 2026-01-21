@@ -18,6 +18,11 @@ export default function SettingsPage() {
     const [saved, setSaved] = useState(false);
     const [loading, setLoading] = useState(true);
     const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
+    const [notifications, setNotifications] = useState({
+        emailAlerts: false,
+        systemUpdates: false,
+        newEnrollments: false
+    });
 
     useEffect(() => {
         const fetchSettings = async () => {
@@ -26,6 +31,9 @@ export default function SettingsPage() {
                 const data = await res.json();
                 if (data.twoFactorEnabled !== undefined) {
                     setTwoFactorEnabled(data.twoFactorEnabled);
+                }
+                if (data.notificationPreferences) {
+                    setNotifications(data.notificationPreferences);
                 }
                 setSession({ user: { name: 'Admin' } });
             } catch (error) {
@@ -44,7 +52,10 @@ export default function SettingsPage() {
             const res = await fetch('/api/admin/settings', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ twoFactorEnabled })
+                body: JSON.stringify({
+                    twoFactorEnabled,
+                    notificationPreferences: notifications
+                })
             });
 
             if (res.ok) {
@@ -56,6 +67,10 @@ export default function SettingsPage() {
         } finally {
             setLoading(false);
         }
+    };
+
+    const toggleNotification = (key: keyof typeof notifications) => {
+        setNotifications(prev => ({ ...prev, [key]: !prev[key] }));
     };
 
     return (
@@ -173,14 +188,24 @@ export default function SettingsPage() {
                                 Notifications
                             </h3>
                             <div className="space-y-4">
-                                {['Email Alerts', 'System Updates', 'New Enrollments'].map((tip) => (
-                                    <label key={tip} className="flex items-center gap-3 cursor-pointer group">
-                                        <div className="w-5 h-5 border-2 border-slate-200 rounded-lg flex items-center justify-center group-hover:border-blue-300 transition-all">
-                                            <div className="w-2 h-2 bg-blue-500 rounded-sm opacity-0 group-data-[checked=true]:opacity-100"></div>
-                                        </div>
-                                        <span className="text-sm font-bold text-slate-600">{tip}</span>
-                                    </label>
-                                ))}
+                                <label className="flex items-center gap-3 cursor-pointer group" onClick={() => toggleNotification('emailAlerts')}>
+                                    <div className={`w-5 h-5 border-2 rounded-lg flex items-center justify-center transition-all ${notifications.emailAlerts ? 'bg-blue-500 border-blue-500' : 'border-slate-200 group-hover:border-blue-300'}`}>
+                                        <div className={`w-2 h-2 bg-white rounded-sm ${notifications.emailAlerts ? 'opacity-100' : 'opacity-0'}`}></div>
+                                    </div>
+                                    <span className="text-sm font-bold text-slate-600">Email Alerts</span>
+                                </label>
+                                <label className="flex items-center gap-3 cursor-pointer group" onClick={() => toggleNotification('systemUpdates')}>
+                                    <div className={`w-5 h-5 border-2 rounded-lg flex items-center justify-center transition-all ${notifications.systemUpdates ? 'bg-blue-500 border-blue-500' : 'border-slate-200 group-hover:border-blue-300'}`}>
+                                        <div className={`w-2 h-2 bg-white rounded-sm ${notifications.systemUpdates ? 'opacity-100' : 'opacity-0'}`}></div>
+                                    </div>
+                                    <span className="text-sm font-bold text-slate-600">System Updates</span>
+                                </label>
+                                <label className="flex items-center gap-3 cursor-pointer group" onClick={() => toggleNotification('newEnrollments')}>
+                                    <div className={`w-5 h-5 border-2 rounded-lg flex items-center justify-center transition-all ${notifications.newEnrollments ? 'bg-blue-500 border-blue-500' : 'border-slate-200 group-hover:border-blue-300'}`}>
+                                        <div className={`w-2 h-2 bg-white rounded-sm ${notifications.newEnrollments ? 'opacity-100' : 'opacity-0'}`}></div>
+                                    </div>
+                                    <span className="text-sm font-bold text-slate-600">New Enrollments</span>
+                                </label>
                             </div>
                         </div>
                     </div>

@@ -11,6 +11,11 @@ export interface User {
   passwordHash: string;
   role: 'admin' | 'teacher' | 'student';
   twoFactorEnabled: boolean;
+  notificationPreferences?: {
+    emailAlerts: boolean;
+    systemUpdates: boolean;
+    newEnrollments: boolean;
+  };
   createdAt: string;
 }
 
@@ -38,6 +43,7 @@ export interface Result {
   marks: number;
   maxMarks: number;
   resultStatus: 'PASS' | 'FAIL';
+  semester: number;
   createdAt: string;
 }
 
@@ -54,10 +60,12 @@ export interface StudentResource {
   id: string;
   studentId: string;
   name: string;
-  url: string;
+  url?: string;
   status: 'WANT_TO_LEARN' | 'LEARNING' | 'MASTER';
   certificateUrl?: string;
-  projectUrl?: string;
+  category?: string;
+  icon?: string;
+  projects?: { name: string; url: string; description?: string }[];
   notes?: string;
   createdAt: string;
 }
@@ -132,12 +140,18 @@ export const db = {
       }
       return data.users;
     },
-    updateSettings: async (userId: string, settings: { twoFactorEnabled?: boolean }) => {
+    updateSettings: async (userId: string, settings: { twoFactorEnabled?: boolean, notificationPreferences?: User['notificationPreferences'] }) => {
       const dbData = readDb();
       const userIndex = dbData.users.findIndex(u => u.id === userId);
       if (userIndex !== -1) {
         if (settings.twoFactorEnabled !== undefined) {
           dbData.users[userIndex].twoFactorEnabled = settings.twoFactorEnabled;
+        }
+        if (settings.notificationPreferences) {
+          dbData.users[userIndex].notificationPreferences = {
+            ...(dbData.users[userIndex].notificationPreferences || { emailAlerts: false, systemUpdates: false, newEnrollments: false }),
+            ...settings.notificationPreferences
+          };
         }
         writeDb(dbData);
         return dbData.users[userIndex];
@@ -192,6 +206,25 @@ export const db = {
         return data.attendance.filter(a => a.studentId === where.studentId);
       }
       return data.attendance;
+    },
+    upsert: async ({ where, create, update }: { where: { studentId: string; date: string }, create: Omit<Attendance, 'id'>, update: Partial<Attendance> }) => {
+      const dbData = readDb();
+      // Check for exact date match or date starting with the same YYYY-MM-DD if we want to be looser, 
+      // but for now strict equality on what's passed is safest if we consistently pass YYYY-MM-DD
+      const index = dbData.attendance.findIndex(a => a.studentId === where.studentId && a.date === where.date);
+
+      if (index !== -1) {
+        // Update existing
+        dbData.attendance[index] = { ...dbData.attendance[index], ...update };
+        writeDb(dbData);
+        return dbData.attendance[index];
+      } else {
+        // Create new
+        const newRecord = { ...create, id: `att-${Date.now()}-${Math.random().toString(36).substr(2, 9)}` };
+        dbData.attendance.push(newRecord);
+        writeDb(dbData);
+        return newRecord;
+      }
     }
   },
   result: {

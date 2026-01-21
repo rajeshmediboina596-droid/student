@@ -99,14 +99,27 @@ export default function Footer() {
                                         </div>
                                     </div>
                                 </div>
+                            ) : modalState === 'privacy' ? (
+                                <div className="space-y-6">
+                                    <h4 className="font-black text-slate-900 text-lg">1. Information Collection</h4>
+                                    <p>We collect essential academic information including Student IDs, full names, and attendance records. This data is used solely for the purpose of academic management and record-keeping within the institution.</p>
+
+                                    <h4 className="font-black text-slate-900 text-lg">2. Use of Information</h4>
+                                    <p>Your data is utilized to generate academic reports, track attendance progress, and facilitate communication between faculty and students. We do not sell or share your personal data with third-party advertisers.</p>
+
+                                    <h4 className="font-black text-slate-900 text-lg">3. Data Protection</h4>
+                                    <p>We implement strict security measures to protect your academic records. Access to sensitive data is restricted to authorized faculty and administrative staff only.</p>
+                                </div>
                             ) : (
                                 <div className="space-y-6">
-                                    <h4 className="font-black text-slate-900 text-lg">1. Introduction</h4>
-                                    <p>Welcome to the SMS PRO Student Management System. We are committed to protecting your personal data and providing a professional environment for academic management.</p>
-                                    <h4 className="font-black text-slate-900 text-lg">2. Data Usage</h4>
-                                    <p>Your data is used solely for educational purposes, including tracking attendance, record keeping for grades, and material distribution. We do not share your information with third-party advertisers.</p>
-                                    <h4 className="font-black text-slate-900 text-lg">3. Security</h4>
-                                    <p>Our platform uses industry-standard encryption to protect your sensitive records. Our mock database implementation is designed for demonstration and simulation purposes.</p>
+                                    <h4 className="font-black text-slate-900 text-lg">1. Academic Integrity</h4>
+                                    <p>By using SMS PRO, you agree to maintain academic integrity. Any attempt to manipulate attendance records, grades, or other academic data is strictly prohibited and may result in disciplinary action.</p>
+
+                                    <h4 className="font-black text-slate-900 text-lg">2. Account Security</h4>
+                                    <p>You are responsible for maintaining the confidentiality of your login credentials. Please notify the administration immediately if you suspect any unauthorized access to your account.</p>
+
+                                    <h4 className="font-black text-slate-900 text-lg">3. Platform Usage</h4>
+                                    <p>This platform is provided as an educational tool. While we strive for 100% uptime, maintenance and updates may occasionally interrupt service. We are not liable for any disruptions affecting non-critical academic activities.</p>
                                 </div>
                             )}
                         </div>

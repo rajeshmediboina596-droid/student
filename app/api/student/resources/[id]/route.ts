@@ -13,7 +13,7 @@ export async function PATCH(
     }
 
     try {
-        const { status, certificateUrl, projectUrl, notes } = await request.json();
+        const { status, certificateUrl, category, icon, projects, notes } = await request.json();
 
         const resources = await db.studentResource.findMany({ where: { studentId: session.user.id } });
         const exists = resources.find((r: any) => r.id === id);
@@ -24,7 +24,7 @@ export async function PATCH(
 
         const updated = await db.studentResource.update({
             where: { id: id },
-            data: { status, certificateUrl, projectUrl, notes }
+            data: { status, certificateUrl, category, icon, projects, notes }
         });
 
         return NextResponse.json(updated);
