@@ -134,7 +134,12 @@ export default function StudentDashboard() {
                                 Student Portal
                             </div>
                             <h1 className="text-4xl font-black text-slate-900 leading-tight">
-                                Hello, {userName.split(' ')[0]}! 👋
+                                {(() => {
+                                    const hour = new Date().getHours();
+                                    if (hour < 12) return `Good Morning, ${userName.split(' ')[0]}! ☀️`;
+                                    if (hour < 17) return `Good Afternoon, ${userName.split(' ')[0]}! 🌤️`;
+                                    return `Good Evening, ${userName.split(' ')[0]}! 🌙`;
+                                })()}
                             </h1>
                             <p className="text-slate-500 font-medium mt-2">Here&apos;s a quick look at your academic progress.</p>
                         </div>

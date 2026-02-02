@@ -3,7 +3,7 @@
     {
       "id": "admin-1",
       "name": "System Admin",
-      "email": "admin@school.com",
+      "email": "admin@nttf.co.in",
       "passwordHash": "$2a$10$abcdefg...",
       "role": "admin",
       "twoFactorEnabled": true,
@@ -17,7 +17,7 @@
     {
       "id": "teacher-1",
       "name": "John Teacher",
-      "email": "teacher@school.com",
+      "email": "teacher@nttf.co.in",
       "passwordHash": "$2a$10$abcdefg...",
       "role": "teacher",
       "createdAt": "2024-01-01T00:00:00.000Z"
@@ -25,7 +25,7 @@
     {
       "id": "student-1",
       "name": "Alice Student",
-      "email": "alice@school.com",
+      "email": "alice@nttf.co.in",
       "passwordHash": "$2a$10$abcdefg...",
       "role": "student",
       "createdAt": "2024-01-01T00:00:00.000Z"
@@ -33,18 +33,27 @@
     {
       "id": "student-2",
       "name": "Bob Student",
-      "email": "bob@school.com",
+      "email": "bob@nttf.co.in",
       "passwordHash": "$2a$10$abcdefg...",
       "role": "student",
       "createdAt": "2024-01-01T00:00:00.000Z"
     },
     {
       "name": "chenna kesava",
-      "email": "chenna@school.com",
+      "email": "chenna@nttf.co.in",
       "passwordHash": "$2b$10$dmshE5ufmuHiWWus0hdsJOUy2NwxU7pymDyBFCbhmGKHYDToN9Loy",
       "role": "teacher",
       "id": "user-1767244550095",
       "createdAt": "2026-01-01T05:15:50.095Z"
+    },
+    {
+      "name": "chinna",
+      "email": "chinna@nttf.co.in",
+      "passwordHash": "$2b$10$jPmXCldOZUr/mmVfAyBwLuPSw51bJTJC00LpgBqQW6V9vp8lUnZaW",
+      "role": "admin",
+      "twoFactorEnabled": false,
+      "id": "user-1768988343164",
+      "createdAt": "2026-01-21T09:39:03.164Z"
     }
   ],
   "studentProfiles": [
@@ -65,6 +74,12 @@
       "dob": "2004-08-20T00:00:00.000Z",
       "phone": "987-654-3210",
       "address": "456 Oak Ave"
+    },
+    {
+      "userId": "user-1769572262193",
+      "course": "General",
+      "batch": "2025",
+      "id": "profile-1769572262194"
     }
   ],
   "attendance": [
@@ -91,6 +106,42 @@
       "date": "2026-01-09",
       "status": "PRESENT",
       "id": "att-1767943150891"
+    },
+    {
+      "studentId": "profile-1",
+      "date": "2026-01-21",
+      "status": "PRESENT",
+      "id": "att-1768974883998-s9ysumvgp"
+    },
+    {
+      "studentId": "profile-2",
+      "date": "2026-01-21",
+      "status": "PRESENT",
+      "id": "att-1768974884000-ortswk66b"
+    },
+    {
+      "studentId": "profile-1",
+      "date": "2026-01-25",
+      "status": "PRESENT",
+      "id": "att-1769341405097-mn0cbp65v"
+    },
+    {
+      "studentId": "profile-2",
+      "date": "2026-01-25",
+      "status": "PRESENT",
+      "id": "att-1769341405099-hu1zq6trs"
+    },
+    {
+      "studentId": "profile-1",
+      "date": "2026-01-27",
+      "status": "PRESENT",
+      "id": "att-1769488292299-t91tpuuqt"
+    },
+    {
+      "studentId": "profile-2",
+      "date": "2026-01-27",
+      "status": "PRESENT",
+      "id": "att-1769488292301-9f9voapdv"
     }
   ],
   "results": [
@@ -106,14 +157,6 @@
   ],
   "materials": [],
   "studentResources": [
-    {
-      "studentId": "student-1",
-      "name": "hai",
-      "url": "https://digitalnttf.com/library/skill-topic",
-      "status": "WANT_TO_LEARN",
-      "id": "sr-1768368936272",
-      "createdAt": "2026-01-14T05:35:36.272Z"
-    },
     {
       "studentId": "student-1",
       "name": "bye",

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Sidebar from '@/components/Sidebar';
 import { Users, UserPlus, Trash2, Edit3, X, Check, Search } from 'lucide-react';
+import { toast } from 'sonner';
 
 export default function AdminUsersPage() {
     const [users, setUsers] = useState<any[]>([]);
@@ -16,6 +17,7 @@ export default function AdminUsersPage() {
         password: '',
         role: 'student' as 'admin' | 'teacher' | 'student'
     });
+    const [editingUser, setEditingUser] = useState<any | null>(null);
 
     useEffect(() => {
         fetchUsers();
@@ -36,19 +38,64 @@ export default function AdminUsersPage() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const res = await fetch('/api/admin/users', {
-                method: 'POST',
+            const url = editingUser ? `/api/admin/users/${editingUser.id}` : '/api/admin/users';
+            const method = editingUser ? 'PATCH' : 'POST';
+
+            const res = await fetch(url, {
+                method,
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData),
             });
+
+            const data = await res.json();
+
             if (res.ok) {
+                toast.success(editingUser ? 'User updated successfully' : 'User created successfully');
                 setIsModalOpen(false);
+                setEditingUser(null);
                 fetchUsers();
                 setFormData({ name: '', email: '', password: '', role: 'student' });
+            } else {
+                toast.error(data.message || 'Failed to create user');
             }
         } catch (err) {
             console.error(err);
+            toast.error('Something went wrong');
         }
+    };
+
+    const handleDelete = async (userId: string) => {
+        if (!confirm('Are you sure you want to delete this user?')) return;
+
+        try {
+            const res = await fetch(`/api/admin/users/${userId}`, { method: 'DELETE' });
+            if (res.ok) {
+                toast.success('User deleted successfully');
+                fetchUsers();
+            } else {
+                toast.error('Failed to delete user');
+            }
+        } catch (err) {
+            console.error(err);
+            toast.error('Something went wrong');
+        }
+    };
+
+    const handleEdit = (user: any) => {
+        setEditingUser(user);
+        setFormData({
+            name: user.name,
+            email: user.email,
+            password: '', // Don't populate password
+            role: user.role
+        });
+        setIsModalOpen(true);
+    };
+
+    const openCreateModal = () => {
+        setEditingUser(null);
+        setFormData({ name: '', email: '', password: '', role: 'student' });
+        setIsModalOpen(true);
     };
 
     return (
@@ -74,7 +121,7 @@ export default function AdminUsersPage() {
                             />
                         </div>
                         <button
-                            onClick={() => setIsModalOpen(true)}
+                            onClick={openCreateModal}
                             className="bg-slate-900 text-white px-6 py-4 rounded-2xl font-bold flex items-center gap-2 hover:bg-black transition-all shadow-xl shadow-slate-200"
                         >
                             <UserPlus size={20} />
@@ -123,10 +170,16 @@ export default function AdminUsersPage() {
                                     </td>
                                     <td className="px-8 py-6 text-right">
                                         <div className="flex justify-end gap-2">
-                                            <button className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all">
+                                            <button
+                                                onClick={() => handleEdit(user)}
+                                                className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all"
+                                            >
                                                 <Edit3 size={18} />
                                             </button>
-                                            <button className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-all">
+                                            <button
+                                                onClick={() => handleDelete(user.id)}
+                                                className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-all"
+                                            >
                                                 <Trash2 size={18} />
                                             </button>
                                         </div>
@@ -145,7 +198,7 @@ export default function AdminUsersPage() {
                     <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-slate-900/60 backdrop-blur-sm">
                         <div className="bg-white w-full max-w-xl rounded-3xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300">
                             <div className="p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
-                                <h3 className="text-2xl font-black text-slate-800">Register New User</h3>
+                                <h3 className="text-2xl font-black text-slate-800">{editingUser ? 'Edit User' : 'Register New User'}</h3>
                                 <button onClick={() => setIsModalOpen(false)} className="p-2 hover:bg-slate-200 rounded-xl transition-all">
                                     <X size={24} />
                                 </button>
@@ -174,10 +227,12 @@ export default function AdminUsersPage() {
                                         />
                                     </div>
                                     <div>
-                                        <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Password</label>
+                                        <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">
+                                            Password {editingUser && <span className="text-slate-300 font-normal normal-case">(Limit blank to keep unchanged)</span>}
+                                        </label>
                                         <input
                                             type="password"
-                                            required
+                                            required={!editingUser}
                                             className="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:outline-none focus:border-blue-500 transition-all font-bold"
                                             value={formData.password}
                                             onChange={(e) => setFormData({ ...formData, password: e.target.value })}

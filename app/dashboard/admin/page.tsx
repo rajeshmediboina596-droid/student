@@ -36,7 +36,14 @@ export default async function AdminDashboard() {
                             <Shield size={12} />
                             Internal Administration
                         </div>
-                        <h1 className="text-4xl font-black text-slate-800">System Overview</h1>
+                        <h1 className="text-4xl font-black text-slate-800">
+                            {(() => {
+                                const hour = new Date().getHours();
+                                if (hour < 12) return `Good Morning, Admin! ☀️`;
+                                if (hour < 17) return `Good Afternoon, Admin! 🌤️`;
+                                return `Good Evening, Admin! 🌙`;
+                            })()}
+                        </h1>
                         <p className="text-slate-500 font-medium mt-2">Manage global users, security and system integrity.</p>
                     </div>
                     <div className="flex gap-3">

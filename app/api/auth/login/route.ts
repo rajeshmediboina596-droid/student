@@ -7,6 +7,10 @@ export async function POST(request: Request) {
     try {
         const { email, password } = await request.json();
 
+        if (!email.endsWith('@nttf.co.in')) {
+            return NextResponse.json({ message: 'Only @nttf.co.in emails are allowed' }, { status: 400 });
+        }
+
         const user = await db.user.findUnique({ where: { email } });
 
         if (!user) {

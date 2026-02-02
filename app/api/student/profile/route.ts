@@ -7,7 +7,13 @@ export async function GET() {
     if (!session) return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
 
     const profile = await db.studentProfile.findUnique({ where: { userId: session.user.id } });
-    return NextResponse.json({ ...session.user, profile });
+    const user = await db.user.findFirst({ where: { id: session.user.id } });
+
+    return NextResponse.json({
+        ...session.user,
+        profile,
+        twoFactorEnabled: user?.twoFactorEnabled || false
+    });
 }
 
 export async function PATCH(request: Request) {

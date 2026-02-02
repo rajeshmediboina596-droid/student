@@ -17,6 +17,10 @@ export interface User {
     newEnrollments: boolean;
   };
   createdAt: string;
+  appearance?: {
+    darkMode: boolean;
+    accentColor: string;
+  };
 }
 
 export interface StudentProfile {
@@ -157,6 +161,22 @@ export const db = {
         return dbData.users[userIndex];
       }
       return null;
+    },
+    update: async ({ where, data }: { where: { id: string }, data: Partial<User> }) => {
+      const dbData = readDb();
+      const index = dbData.users.findIndex(u => u.id === where.id);
+      if (index !== -1) {
+        dbData.users[index] = { ...dbData.users[index], ...data };
+        writeDb(dbData);
+        return dbData.users[index];
+      }
+      return null;
+    },
+    delete: async ({ where }: { where: { id: string } }) => {
+      const dbData = readDb();
+      dbData.users = dbData.users.filter(u => u.id !== where.id);
+      writeDb(dbData);
+      return true;
     }
   },
   studentProfile: {

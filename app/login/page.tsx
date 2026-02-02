@@ -18,6 +18,12 @@ export default function LoginPage() {
         setLoading(true);
         setError('');
 
+        if (!email.endsWith('@nttf.co.in')) {
+            setError('Please use your @nttf.co.in email address.');
+            setLoading(false);
+            return;
+        }
+
         try {
             const res = await fetch('/api/auth/login', {
                 method: 'POST',
@@ -75,7 +81,7 @@ export default function LoginPage() {
                                 autoComplete="email"
                                 required
                                 className="block w-full px-6 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100 transition-all duration-300 font-medium"
-                                placeholder="admin@school.com"
+                                placeholder="yourname@nttf.co.in"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                             />
@@ -111,6 +117,26 @@ export default function LoginPage() {
                             {/* Focus gradient line */}
                             <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-indigo-500 group-focus-within:w-full transition-all duration-300 rounded-full" />
                         </div>
+                    </div>
+
+                    {/* Remember Me & Forgot Password */}
+                    <div className="flex items-center justify-between">
+                        <label className="flex items-center gap-2 cursor-pointer group">
+                            <input
+                                type="checkbox"
+                                className="w-5 h-5 rounded-lg border-2 border-slate-200 text-blue-600 focus:ring-blue-500 focus:ring-offset-0 cursor-pointer"
+                            />
+                            <span className="text-sm font-bold text-slate-500 group-hover:text-slate-700 transition-colors">
+                                Remember me
+                            </span>
+                        </label>
+                        <button
+                            type="button"
+                            className="text-sm font-bold text-blue-600 hover:text-blue-700 transition-colors"
+                            onClick={() => alert('Password reset functionality coming soon!')}
+                        >
+                            Forgot password?
+                        </button>
                     </div>
 
                     {/* Error Message */}

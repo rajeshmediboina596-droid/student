@@ -35,7 +35,13 @@ export default async function TeacherDashboard() {
                             Faculty Portal
                         </div>
                         <h1 className="text-4xl font-black text-slate-800">
-                            Welcome, Professor {session.user.name.split(' ').pop()}
+                            {(() => {
+                                const hour = new Date().getHours();
+                                const name = session.user.name.split(' ').pop();
+                                if (hour < 12) return `Good Morning, Professor ${name}! ☀️`;
+                                if (hour < 17) return `Good Afternoon, Professor ${name}! 🌤️`;
+                                return `Good Evening, Professor ${name}! 🌙`;
+                            })()}
                         </h1>
                         <p className="text-slate-500 font-medium mt-2">Manage your students and academic resources.</p>
                     </div>

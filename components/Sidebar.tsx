@@ -10,7 +10,8 @@ import {
     ClipboardList,
     FileText,
     ShieldCheck,
-    Sparkles
+    Sparkles,
+    Settings
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -44,6 +45,7 @@ export default function Sidebar({ role, userName }: SidebarProps) {
             { name: 'Attendance', href: '/dashboard/student/attendance', icon: ClipboardList },
             { name: 'My Grades', href: '/dashboard/student/results', icon: FileText },
             { name: 'Skills', href: '/dashboard/student/materials', icon: BookOpen },
+            { name: 'Settings', href: '/dashboard/student/settings', icon: Settings },
         ],
     };
 
