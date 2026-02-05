@@ -28,7 +28,12 @@
       "email": "alice@nttf.co.in",
       "passwordHash": "$2a$10$abcdefg...",
       "role": "student",
-      "createdAt": "2024-01-01T00:00:00.000Z"
+      "createdAt": "2024-01-01T00:00:00.000Z",
+      "appearance": {
+        "darkMode": false,
+        "accentColor": "blue"
+      },
+      "twoFactorEnabled": true
     },
     {
       "id": "student-2",
@@ -142,6 +147,18 @@
       "date": "2026-01-27",
       "status": "PRESENT",
       "id": "att-1769488292301-9f9voapdv"
+    },
+    {
+      "studentId": "profile-1",
+      "date": "2026-02-02",
+      "status": "PRESENT",
+      "id": "att-1770026091106-6ibopduat"
+    },
+    {
+      "studentId": "profile-2",
+      "date": "2026-02-02",
+      "status": "PRESENT",
+      "id": "att-1770026091108-d1hrpii9o"
     }
   ],
   "results": [
