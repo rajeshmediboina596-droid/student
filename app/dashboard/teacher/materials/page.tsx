@@ -1,5 +1,7 @@
 import Sidebar from '@/components/Sidebar';
-import { BookOpen, Upload, FileText, ExternalLink, Trash2 } from 'lucide-react';
+import UploadMaterialButton from '@/components/UploadMaterialButton';
+import DeleteMaterialButton from '@/components/DeleteMaterialButton';
+import { BookOpen, FileText, ExternalLink } from 'lucide-react';
 import { getSession } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { db } from '@/lib/db';
@@ -11,7 +13,7 @@ export default async function MaterialsPage() {
     const materials = await db.material.findMany();
 
     return (
-        <div className="min-h-screen bg-slate-50 flex">
+        <div className="flex w-full min-h-screen">
             <Sidebar role="teacher" userName={session.user.name} />
 
             <main className="ml-72 flex-grow p-10">
@@ -21,10 +23,7 @@ export default async function MaterialsPage() {
                         <h1 className="text-4xl font-black text-slate-800">Learning Materials</h1>
                         <p className="text-slate-500 font-medium mt-1">Upload and manage study resources for your students.</p>
                     </div>
-                    <button className="bg-indigo-600 text-white px-8 py-4 rounded-2xl font-bold flex items-center gap-2 hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-100">
-                        <Upload size={20} />
-                        Upload New File
-                    </button>
+                    <UploadMaterialButton />
                 </header>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -36,14 +35,12 @@ export default async function MaterialsPage() {
                             <h3 className="text-xl font-bold text-slate-800 mb-2">{mat.title}</h3>
                             <p className="text-slate-500 text-sm mb-6 line-clamp-2">{mat.description || 'No description provided.'}</p>
                             <div className="flex items-center justify-between pt-6 border-t border-slate-50">
-                                <span className="text-xs font-black text-slate-300 uppercase">PDF Document</span>
+                                <span className="text-xs font-black text-slate-300 uppercase">Document</span>
                                 <div className="flex gap-2">
-                                    <button className="p-2 text-slate-400 hover:text-indigo-600 transition-all">
+                                    <a href={mat.fileUrl} target="_blank" rel="noopener noreferrer" className="p-2 text-slate-400 hover:text-indigo-600 transition-all">
                                         <ExternalLink size={18} />
-                                    </button>
-                                    <button className="p-2 text-slate-400 hover:text-rose-600 transition-all">
-                                        <Trash2 size={18} />
-                                    </button>
+                                    </a>
+                                    <DeleteMaterialButton id={mat.id} />
                                 </div>
                             </div>
                         </div>

@@ -58,7 +58,7 @@ export default function MarksPage() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50 flex">
+        <div className="flex w-full min-h-screen">
             <Sidebar role="teacher" userName="Professor" />
 
             <main className="ml-72 flex-grow p-10">

@@ -74,7 +74,7 @@ export default function SettingsPage() {
     };
 
     return (
-        <div className="min-h-screen bg-slate-50 flex">
+        <div className="flex w-full min-h-screen text-slate-800 dark:text-slate-100">
             <Sidebar role="admin" userName={session?.user?.name || 'Admin'} />
 
             <main className="ml-72 flex-grow p-10 animate-slide-up">

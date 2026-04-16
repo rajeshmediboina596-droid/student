@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import jsPDF from 'jspdf';
+import * as htmlToImage from 'html-to-image';
 import Sidebar from '@/components/Sidebar';
 import {
     Award,
@@ -21,6 +23,7 @@ export default function StudentResultsPage() {
     const [results, setResults] = useState<Result[]>([]);
     const [userName, setUserName] = useState('');
     const [selectedSemester, setSelectedSemester] = useState<number | 'ALL'>('ALL');
+    const [isExporting, setIsExporting] = useState(false);
 
     useEffect(() => {
         fetchData();
@@ -59,20 +62,49 @@ export default function StudentResultsPage() {
     // CGPA Calculation (Simple mock for demo)
     const cgpa = (averagePercentage / 10).toFixed(1);
 
+    const handleExportPDF = async () => {
+        const element = document.getElementById('exportable-content');
+        if (!element) return;
+
+        setIsExporting(true);
+        try {
+            const dataUrl = await htmlToImage.toPng(element, {
+                quality: 1,
+                backgroundColor: '#f8fafc', // slate-50
+                pixelRatio: 2,
+            });
+            const pdf = new jsPDF('p', 'mm', 'a4');
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = (element.offsetHeight * pdfWidth) / element.offsetWidth;
+            
+            pdf.addImage(dataUrl, 'PNG', 0, 0, pdfWidth, pdfHeight);
+            pdf.save('My_Grades.pdf');
+        } catch (error) {
+            console.error('Error generating PDF:', error);
+        } finally {
+            setIsExporting(false);
+        }
+    };
+
     return (
-        <div className="min-h-screen bg-slate-50 text-slate-800 flex">
+        <div className="flex w-full min-h-screen text-slate-800 dark:text-slate-100">
             <Sidebar role="student" userName={userName} />
 
-            <main className="ml-72 flex-grow p-10 overflow-auto">
+            <main className="ml-72 flex-grow p-10 overflow-auto" id="exportable-content">
                 <header className="mb-10 flex justify-between items-end">
                     <div>
                         <h2 className="text-[11px] font-black text-blue-600 uppercase tracking-[0.2em] mb-3 leading-none">Performance</h2>
                         <h1 className="text-4xl font-black text-slate-900 mb-1">My Grades</h1>
                         <p className="text-slate-500 font-medium">Summary of your exam results and subject performance.</p>
                     </div>
-                    <button className="flex items-center gap-2 bg-white px-5 py-3 rounded-2xl border border-slate-200 text-slate-600 font-black text-xs hover:bg-slate-50 transition-all shadow-sm">
+                    <button 
+                        onClick={handleExportPDF}
+                        disabled={isExporting}
+                        className="flex items-center gap-2 bg-white px-5 py-3 rounded-2xl border border-slate-200 text-slate-600 font-black text-xs hover:bg-slate-50 transition-all shadow-sm disabled:opacity-50"
+                        data-html2canvas-ignore="true"
+                    >
                         <Download size={16} />
-                        EXPORT PDF
+                        {isExporting ? 'EXPORTING...' : 'EXPORT PDF'}
                     </button>
                 </header>
 

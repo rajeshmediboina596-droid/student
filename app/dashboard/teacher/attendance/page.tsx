@@ -89,7 +89,7 @@ export default function AttendancePage() {
     };
 
     return (
-        <div className="min-h-screen bg-slate-50 flex">
+        <div className="flex w-full min-h-screen">
             <Sidebar role="teacher" userName="Professor" />
             <Toaster position="top-right" />
 

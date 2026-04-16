@@ -263,6 +263,10 @@ export const db = {
     }
   },
   material: {
+    findUnique: async ({ where }: { where: { id: string } }) => {
+      const data = readDb();
+      return data.materials.find(m => m.id === where.id) || null;
+    },
     create: async ({ data }: { data: Omit<Material, 'id' | 'createdAt'> }) => {
       const dbData = readDb();
       const newMat = { ...data, id: `mat-${Date.now()}`, createdAt: new Date().toISOString() };
@@ -272,6 +276,12 @@ export const db = {
     },
     findMany: async () => {
       return readDb().materials;
+    },
+    delete: async ({ where }: { where: { id: string } }) => {
+      const dbData = readDb();
+      dbData.materials = dbData.materials.filter(m => m.id !== where.id);
+      writeDb(dbData);
+      return true;
     }
   },
   studentResource: {

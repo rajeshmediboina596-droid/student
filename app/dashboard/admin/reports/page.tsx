@@ -49,6 +49,8 @@ export default function ReportsPage() {
     const [attendance, setAttendance] = useState<Attendance[]>([]);
     const [results, setResults] = useState<Result[]>([]);
     const [userName, setUserName] = useState('Admin');
+    const [roleFilter, setRoleFilter] = useState('all');
+    const [isFilterOpen, setIsFilterOpen] = useState(false);
 
     useEffect(() => {
         fetchData();
@@ -98,6 +100,7 @@ export default function ReportsPage() {
 
     // Recent activity (mock based on user creation dates)
     const recentActivity = users
+        .filter(u => roleFilter === 'all' ? true : u.role === roleFilter)
         .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
         .slice(0, 5);
 
@@ -106,7 +109,7 @@ export default function ReportsPage() {
     const mockAttendanceData = [85, 78, 92, 88, 95, attendanceRate];
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-rose-50 flex">
+        <div className="flex w-full min-h-screen text-slate-800 dark:text-slate-100">
             <Sidebar role="admin" userName={userName} />
 
             <main className="ml-72 flex-grow p-10">
@@ -116,11 +119,22 @@ export default function ReportsPage() {
                         <h1 className="text-4xl font-black text-slate-800">System Reports</h1>
                         <p className="text-slate-500 font-medium mt-1">Comprehensive analytics and performance metrics.</p>
                     </div>
-                    <div className="flex gap-4">
-                        <button className="bg-white border-2 border-slate-200 text-slate-700 px-6 py-3 rounded-2xl font-bold flex items-center gap-2 hover:border-slate-300 transition-all">
+                    <div className="flex gap-4 relative">
+                        <button 
+                            onClick={() => setIsFilterOpen(!isFilterOpen)}
+                            className="bg-white border-2 border-slate-200 text-slate-700 px-6 py-3 rounded-2xl font-bold flex items-center gap-2 hover:border-slate-300 transition-all">
                             <Filter size={20} />
-                            Filter
+                            Filter {roleFilter !== 'all' && `(${roleFilter})`}
                         </button>
+                        
+                        {isFilterOpen && (
+                            <div className="absolute top-14 left-0 w-48 bg-white border border-slate-100 shadow-xl rounded-2xl overflow-hidden z-10">
+                                <button onClick={() => { setRoleFilter('all'); setIsFilterOpen(false); }} className={`w-full text-left px-4 py-3 font-bold text-sm hover:bg-slate-50 ${roleFilter === 'all' ? 'text-blue-600' : 'text-slate-700'}`}>All Roles</button>
+                                <button onClick={() => { setRoleFilter('student'); setIsFilterOpen(false); }} className={`w-full text-left px-4 py-3 font-bold text-sm hover:bg-slate-50 ${roleFilter === 'student' ? 'text-blue-600' : 'text-slate-700'}`}>Student</button>
+                                <button onClick={() => { setRoleFilter('teacher'); setIsFilterOpen(false); }} className={`w-full text-left px-4 py-3 font-bold text-sm hover:bg-slate-50 ${roleFilter === 'teacher' ? 'text-blue-600' : 'text-slate-700'}`}>Teacher</button>
+                                <button onClick={() => { setRoleFilter('admin'); setIsFilterOpen(false); }} className={`w-full text-left px-4 py-3 font-bold text-sm hover:bg-slate-50 ${roleFilter === 'admin' ? 'text-blue-600' : 'text-slate-700'}`}>Admin</button>
+                            </div>
+                        )}
                         <button className="bg-slate-900 text-white px-6 py-3 rounded-2xl font-bold flex items-center gap-2 hover:bg-black transition-all shadow-lg">
                             <Download size={20} />
                             Export CSV

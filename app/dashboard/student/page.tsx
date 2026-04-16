@@ -102,7 +102,7 @@ export default function StudentDashboard() {
     };
 
     if (loading) return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
+        <div className="min-h-screen flex items-center justify-center">
             <div className="flex flex-col items-center gap-6">
                 <div className="relative">
                     <div className="w-16 h-16 border-4 border-blue-100 rounded-full" />
@@ -119,7 +119,7 @@ export default function StudentDashboard() {
 
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 text-slate-800 flex">
+        <div className="flex w-full min-h-screen text-slate-800 dark:text-slate-100">
             <Sidebar role="student" userName={userName} />
 
             <main className="ml-72 flex-grow p-10 overflow-auto">

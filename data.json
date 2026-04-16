@@ -12,6 +12,10 @@
         "emailAlerts": true,
         "systemUpdates": true,
         "newEnrollments": true
+      },
+      "appearance": {
+        "darkMode": true,
+        "accentColor": "purple"
       }
     },
     {
@@ -30,7 +34,7 @@
       "role": "student",
       "createdAt": "2024-01-01T00:00:00.000Z",
       "appearance": {
-        "darkMode": false,
+        "darkMode": true,
         "accentColor": "blue"
       },
       "twoFactorEnabled": true
@@ -159,6 +163,66 @@
       "date": "2026-02-02",
       "status": "PRESENT",
       "id": "att-1770026091108-d1hrpii9o"
+    },
+    {
+      "studentId": "profile-1",
+      "date": "2026-03-13",
+      "status": "PRESENT",
+      "id": "att-1773392067300-fv8c11jfb"
+    },
+    {
+      "studentId": "profile-2",
+      "date": "2026-03-13",
+      "status": "PRESENT",
+      "id": "att-1773392067301-3u10l3bs1"
+    },
+    {
+      "studentId": "profile-1",
+      "date": "2026-03-30",
+      "status": "PRESENT",
+      "id": "att-1774850331677-8gvn27zkd"
+    },
+    {
+      "studentId": "profile-2",
+      "date": "2026-03-30",
+      "status": "PRESENT",
+      "id": "att-1774850331680-h1hhc4a6n"
+    },
+    {
+      "studentId": "profile-1",
+      "date": "2026-04-02",
+      "status": "PRESENT",
+      "id": "att-1775121330991-031a7tdgi"
+    },
+    {
+      "studentId": "profile-2",
+      "date": "2026-04-02",
+      "status": "PRESENT",
+      "id": "att-1775121330993-jidtr1aby"
+    },
+    {
+      "studentId": "profile-1",
+      "date": "2026-04-10",
+      "status": "PRESENT",
+      "id": "att-1775803740719-l5xvbd4m8"
+    },
+    {
+      "studentId": "profile-2",
+      "date": "2026-04-10",
+      "status": "PRESENT",
+      "id": "att-1775803740720-3bic4a7yn"
+    },
+    {
+      "studentId": "profile-1",
+      "date": "2026-04-13",
+      "status": "PRESENT",
+      "id": "att-1776075541529-p9h46x6uf"
+    },
+    {
+      "studentId": "profile-2",
+      "date": "2026-04-13",
+      "status": "PRESENT",
+      "id": "att-1776075541530-n42p3jm12"
     }
   ],
   "results": [
@@ -172,7 +236,16 @@
       "createdAt": "2024-12-10T00:00:00.000Z"
     }
   ],
-  "materials": [],
+  "materials": [
+    {
+      "title": "cybersecurity_v2.pptx",
+      "description": "",
+      "fileUrl": "/materials/1775121370009-cybersecurity_v2.pptx",
+      "uploadedBy": "user-1767244550095",
+      "id": "mat-1775121370015",
+      "createdAt": "2026-04-02T09:16:10.015Z"
+    }
+  ],
   "studentResources": [
     {
       "studentId": "student-1",
@@ -181,6 +254,23 @@
       "status": "LEARNING",
       "id": "sr-1768368945365",
       "createdAt": "2026-01-14T05:35:45.365Z"
+    },
+    {
+      "studentId": "student-1",
+      "name": "srms",
+      "status": "MASTER",
+      "category": "Other",
+      "icon": "Code",
+      "projects": [
+        {
+          "name": "srms",
+          "url": "https://srms-two.vercel.app/"
+        }
+      ],
+      "id": "sr-1774846936071",
+      "createdAt": "2026-03-30T05:02:16.071Z",
+      "certificateUrl": "",
+      "notes": ""
     }
   ]
 }

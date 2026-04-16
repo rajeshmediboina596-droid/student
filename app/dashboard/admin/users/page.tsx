@@ -99,7 +99,7 @@ export default function AdminUsersPage() {
     };
 
     return (
-        <div className="min-h-screen bg-slate-50 flex">
+        <div className="flex w-full min-h-screen text-slate-800 dark:text-slate-100">
             <Sidebar role="admin" userName="Admin" />
 
             <main className="ml-72 flex-grow p-10">

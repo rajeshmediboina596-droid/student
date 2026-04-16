@@ -93,7 +93,7 @@ export default function StudentAttendancePage() {
     };
 
     return (
-        <div className="min-h-screen bg-slate-50 text-slate-800 flex">
+        <div className="flex w-full min-h-screen text-slate-800 dark:text-slate-100">
             <Sidebar role="student" userName={userName} />
 
             <main className="ml-72 flex-grow p-10 overflow-auto">

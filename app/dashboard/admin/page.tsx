@@ -25,7 +25,7 @@ export default async function AdminDashboard() {
     const students = allUsers.filter((u: any) => u.role === 'student').length;
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-rose-50 flex">
+        <div className="flex w-full min-h-screen text-slate-800 dark:text-slate-100">
             <Sidebar role="admin" userName={session.user.name} />
 
             <main className="ml-72 flex-grow p-10 animate-slide-up">

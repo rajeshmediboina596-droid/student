@@ -5,6 +5,7 @@ import Sidebar from '@/components/Sidebar';
 import Footer from '@/components/Footer';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
+import { useTheme } from '@/components/ThemeProvider';
 import {
     User,
     Bell,
@@ -47,23 +48,11 @@ export default function StudentSettingsPage() {
         pushNotifications: true
     });
 
-    const [appearanceSettings, setAppearanceSettings] = useState({
-        darkMode: false,
-        accentColor: 'blue'
-    });
-
-    // Apply Dark Mode effect
-    useEffect(() => {
-        if (appearanceSettings.darkMode) {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-        }
-    }, [appearanceSettings.darkMode]);
+    const { darkMode, accentColor, setTheme } = useTheme();
 
     // Save Appearance Settings
-    const updateAppearance = async (newSettings: typeof appearanceSettings) => {
-        setAppearanceSettings(newSettings);
+    const updateAppearance = async (newSettings: { darkMode: boolean, accentColor: string }) => {
+        setTheme(newSettings);
         try {
             await fetch('/api/student/settings', {
                 method: 'PATCH',
@@ -118,7 +107,7 @@ export default function StudentSettingsPage() {
                     twoFactorEnabled: data.twoFactorEnabled || false
                 });
                 if (data.appearance) {
-                    setAppearanceSettings({
+                    setTheme({
                         darkMode: data.appearance.darkMode || false,
                         accentColor: data.appearance.accentColor || 'blue'
                     });
@@ -226,7 +215,7 @@ export default function StudentSettingsPage() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 flex">
+        <div className="flex w-full min-h-screen">
             <Sidebar role="student" userName={userName} />
 
             <main className="ml-72 flex-grow p-10 overflow-auto">
@@ -408,17 +397,17 @@ export default function StudentSettingsPage() {
                                     {/* Dark Mode Toggle */}
                                     <div className="flex items-center justify-between p-6 bg-slate-50 dark:bg-slate-800 rounded-2xl transition-colors">
                                         <div className="flex items-center gap-4">
-                                            {appearanceSettings.darkMode ? <Moon size={24} className="text-indigo-400" /> : <Sun size={24} className="text-amber-500" />}
+                                            {darkMode ? <Moon size={24} className="text-indigo-400" /> : <Sun size={24} className="text-amber-500" />}
                                             <div>
                                                 <p className="font-bold text-slate-800 dark:text-white">Dark Mode</p>
                                                 <p className="text-sm text-slate-500 dark:text-slate-400">Switch to dark theme for reduced eye strain</p>
                                             </div>
                                         </div>
                                         <button
-                                            onClick={() => updateAppearance({ ...appearanceSettings, darkMode: !appearanceSettings.darkMode })}
-                                            className={`w-16 h-9 rounded-full transition-all ${appearanceSettings.darkMode ? 'bg-indigo-600' : 'bg-slate-300'}`}
+                                            onClick={() => updateAppearance({ darkMode: !darkMode, accentColor })}
+                                            className={`w-16 h-9 rounded-full transition-all ${darkMode ? 'bg-indigo-600' : 'bg-slate-300'}`}
                                         >
-                                            <div className={`w-7 h-7 bg-white rounded-full shadow-md transition-transform ${appearanceSettings.darkMode ? 'translate-x-8' : 'translate-x-1'}`} />
+                                            <div className={`w-7 h-7 bg-white rounded-full shadow-md transition-transform ${darkMode ? 'translate-x-8' : 'translate-x-1'}`} />
                                         </button>
                                     </div>
 
@@ -430,8 +419,8 @@ export default function StudentSettingsPage() {
                                             {accentColors.map((color) => (
                                                 <button
                                                     key={color.id}
-                                                    onClick={() => updateAppearance({ ...appearanceSettings, accentColor: color.id })}
-                                                    className={`w-12 h-12 rounded-2xl ${color.color} transition-all ${appearanceSettings.accentColor === color.id
+                                                    onClick={() => updateAppearance({ darkMode, accentColor: color.id })}
+                                                    className={`w-12 h-12 rounded-2xl ${color.color} transition-all ${accentColor === color.id
                                                         ? 'ring-4 ring-offset-2 ring-slate-300 scale-110'
                                                         : 'hover:scale-105'
                                                         }`}
